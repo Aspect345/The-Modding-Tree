@@ -1008,7 +1008,7 @@
       }
       
       //handle XpY format (it's the same thing just with p).
-      var ptparts = value.split("p");
+      var ptparts = value.split("c");
       if (ptparts.length === 2)
       {
         base = 10;

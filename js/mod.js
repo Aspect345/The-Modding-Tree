@@ -1,5 +1,5 @@
 let modInfo = {
-	name: "The ??? Tree",
+	name: "The Empire Building Tree",
 	id: "mymod",
 	author: "nobody",
 	pointsName: "points",
@@ -43,6 +43,11 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
+	if(hasUpgrade("c", 11)) gain=gain.mul(upgradeEffect("c",11))
+		if(getBuyableAmount("c",12).gte(1)) gain=gain.mul(buyableEffect("c",12))
+	if(getBuyableAmount("c",11).gte(1)) gain=gain.mul(buyableEffect("c",11))
+        if(hasUpgrade("c", 21)) gain=gain.mul(upgradeEffect("c",21))
+            if(hasMilestone("c",1)) gain=gain.mul(5)
 	return gain
 }
 
@@ -76,4 +81,42 @@ function maxTickLength() {
 // Use this if you need to undo inflation from an older version. If the version is older than the version that fixed the issue,
 // you can cap their current resources with this.
 function fixOldSave(oldVersion){
+}
+let isCKeyHeld = false;
+let holdInterval = null;
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'c' || event.key === 'C') {
+      // Toggle the isWKeyHeld state
+      isCKeyHeld = !isCKeyHeld;
+      if (isCKeyHeld) {
+          startHoldingC();
+      } else {
+          stopHoldingC();
+      }
+      // Synchronize with autowinbutton
+      autowinbutton = isCKeyHeld;
+      // Save the state in localStorage to keep it consistent after a refresh
+      localStorage.setItem('isCKeyHeld', isCKeyHeld);
+  }
+});
+
+function startHoldingC() {
+  // Start a repeating action while "C" is held down
+  holdInterval = setInterval(() => {
+      if (!isCKeyHeld) {
+          clearInterval(holdInterval);
+          holdInterval = null;
+          return;
+      }
+      // Perform action while holding down "W"
+  }, 1000);
+}
+
+function stopHoldingC() {
+  // Perform cleanup or final actions
+  if (holdInterval) {
+      clearInterval(holdInterval);
+      holdInterval = null;
+  }
 }

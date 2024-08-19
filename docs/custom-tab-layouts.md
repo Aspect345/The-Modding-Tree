@@ -13,7 +13,7 @@ tabFormat: [
         function() { return 'I have ' + format(player.points) + ' pointy points!' },
         { "color": "red", "font-size": "32px", "font-family": "Comic Sans MS" }],
     "blank",
-    ["toggle", ["c", "beep"]],
+    ["toggle", ["p", "beep"]],
     "milestones",
     "blank",
     "blank",

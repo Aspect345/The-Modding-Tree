@@ -1,6 +1,6 @@
 // treeLayout will override the default tree's layout if used
 var layoutInfo = {
-    startTab: "c",
+    startTab: "p",
     startNavTab: "tree-tab",
 
 	showTree: true,
@@ -21,7 +21,7 @@ addNode("spook", {
 // A "ghost" layer which offsets f in the tree
 addNode("g", {
     symbol: "TH",
-    branches: [["c", "red", 4]],
+    branches: [["p", "red", 4]],
     color: '#6d3678',
     layerShown: true,
     canClick() {return player.points.gte(10)},

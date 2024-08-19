@@ -33,7 +33,7 @@ function getStartPoints(){
 
 // Determines if it should show points/sec
 function canGenPoints(){
-	return hasUpgrade("c", 11)
+	return hasUpgrade("p", 11)
 }
 
 // Calculate points/sec!
@@ -42,7 +42,7 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
-	if (hasUpgrade("c", 12)) gain = gain.times(upgradeEffect("c", 12))
+	if (hasUpgrade("p", 12)) gain = gain.times(upgradeEffect("p", 12))
 	return gain
 }
 
@@ -56,7 +56,7 @@ function addedPlayerData() { return {
 var displayThings = [
 	function() {if (player.points.eq(69)) return "Tee hee!"},
 	function() {if (player.f.points.gt(1)) return `You have ${player.f.points} farm points. (Which do nothing.)`},
-	function() {if (inChallenge("c", 11)) return "The game is currently <h1>0%</h1> harder."},
+	function() {if (inChallenge("p", 11)) return "The game is currently <h1>0%</h1> harder."},
 ]
 
 // Determines when the game "ends"

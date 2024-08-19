@@ -1,10 +1,10 @@
-var testTree = [["f", "c"],
+var testTree = [["f", "p"],
 ["g", "spook", "h"]]
 
-addLayer("c", {
-        layer: "c", // This is assigned automatically, both to the layer and all upgrades, etc. Shown here so you know about it
+addLayer("p", {
+        layer: "p", // This is assigned automatically, both to the layer and all upgrades, etc. Shown here so you know about it
         name: "Candies", // This is optional, only used in a few places, If absent it just uses the layer id.
-        symbol: "C", // This appears on the layer's node. Default is the id with the first letter capitalized
+        symbol: "p", // This appears on the layer's node. Default is the id with the first letter capitalized
         position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
         startData() { return {
             unlocked: true,
@@ -69,7 +69,7 @@ addLayer("c", {
                 done() {return player[this.layer].best.gte(4)},
                 effectDescription: "You can toggle beep and boop (which do nothing)",
                 toggles: [
-                    ["c", "beep"], // Each toggle is defined by a layer and the data toggled for that layer
+                    ["p", "beep"], // Each toggle is defined by a layer and the data toggled for that layer
                     ["f", "boop"]],
                 style() {                     
                     if(hasMilestone(this.layer, this.id)) return {
@@ -215,7 +215,7 @@ addLayer("c", {
         }, // Useful for if you gain secondary resources or have other interesting things happen to this layer when you reset it. You gain the currency after this function ends.
 
         hotkeys: [
-            {key: "c", description: "C: reset for lollipops or whatever", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+            {key: "p", description: "C: reset for lollipops or whatever", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
             {key: "ctrl+c", description: "Ctrl+c: respec things", onPress(){respecBuyables(this.layer)}, unlocked() {return hasUpgrade('c', '22')}}  ,
         ],
         increaseUnlockOrder: [], // Array of layer names to have their order increased when this one is first unlocked
@@ -318,7 +318,7 @@ addLayer("c", {
                 content:[ 
                     "buyables", "blank",
                     ["row", [
-                        ["toggle", ["c", "beep"]], ["blank", ["30px", "10px"]], // Width, height
+                        ["toggle", ["p", "beep"]], ["blank", ["30px", "10px"]], // Width, height
                         ["display-text", function() {return "Beep"}], "blank", ["v-line", "200px"],
                         ["column", [
                             ["prestige-button", "", {'width': '150px', 'height': '80px'}],
@@ -348,7 +348,7 @@ addLayer("c", {
                 ],
             },
             illuminati: {
-                unlocked() {return (hasUpgrade("c", 13))},
+                unlocked() {return (hasUpgrade("p", 13))},
                 content:[
                     ["raw-html", function() {return "<h1> C O N F I R M E D </h1>"}], "blank",
                     ["microtabs", "stuff", {'width': '600px', 'height': '350px', 'background-color': 'brown', 'border-style': 'solid'}],

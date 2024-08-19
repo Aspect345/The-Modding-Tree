@@ -23,7 +23,7 @@ Here is an example tree:
 ```js
 [["p"],
  ["left", "blank", "right", "blank"]
- ["a", "b", "blank", "c", "weirdButton"]]
+ ["a", "b", "blank", "p", "weirdButton"]]
 ```
 
 ## Nodes

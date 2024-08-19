@@ -12,7 +12,7 @@ One suggestion: When you're testing your mod, you should turn off offline progre
 
 Now for the good stuff! Head into layers.js. There is a basic layer already there (although it has a few redundant things in it.) Let's see what it's doing...
 
-The most important thing is on the first line, where it says `addLayer("p", {` . This is how you create a new layer. The "p" here becomes the layer id, which is used throughout TMT to refer to the layer. You can change the id, but you will have to replace instances of "p" in the tutorial code as well.
+The most important thing is on the first line, where it says `addLayer("c", {` . This is how you create a new layer. The "c" here becomes the layer id, which is used throughout TMT to refer to the layer. You can change the id, but you will have to replace instances of "c" in the tutorial code as well.
 
 A layer is basically a big object with lots of different properties that you can set to create features. For fun customization, you can change a few things:
     - name: Your layer's name!
