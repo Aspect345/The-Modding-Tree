@@ -447,7 +447,7 @@ addLayer("c", {
             },
             
             unlocked(){
-                if(hasUpgrade("c",23))
+                if(getBuyableAmount("c",21).gte(1))
                     return true 
             },
            
@@ -514,7 +514,7 @@ addLayer("c", {
      
     },
     effect(){
-      let effect=new Decimal(2) 
+      let effect=new Decimal(3) 
       if(hasUpgrade(this.layer,12)) effect=effect.mul(upgradeEffect(this.layer,12))
       if(getBuyableAmount(this.layer,11).gte(1)) effect=effect.mul(0.6)
         if(hasUpgrade("k",11)) effect=effect.div(0.6)
