@@ -1,4 +1,23 @@
 addLayer("A", {
+    tabFormat: {
+        "Achievements": {
+            content: [
+  
+              ["infobox", "lore"],
+              "blank",
+              ["achievements", [1]]
+             
+             
+               
+            ],
+        },
+        "Secret Achievements":{
+            content:[
+                ["achievements", [7]]
+            ]
+        }
+
+    },
     row: "side",
     name: "Achievements", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "A", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -43,7 +62,7 @@ addLayer("A", {
       },
       
     12: {
-        name: "Closely getting there",
+        name: "Slowly getting there",
         tooltip: "Get your first kingdom upgrade! <br> <h5><h5>",
         done() {
         if(getBuyableAmount("c",11).gte(1))
@@ -64,6 +83,48 @@ addLayer("A", {
         tooltip: "Play for 30 mins <br> <h5><h5>",
         done() {
         if(player.timePlayed >1800)
+            return true
+        },
+        style() {
+          return {
+            "width": "110px",
+            "height": " 110px",
+            "border-radius": "20px",
+            "border": "100px",
+            "margin": "0.5px"
+          }
+        },
+    },
+   
+    71: {
+        name(){
+            if (hasAchievement(this.layer,this.id)) {
+                
+                    
+                
+                    return "You are an alien"
+                
+            } 
+            else {
+             
+               
+             
+                
+              return "???????"
+            }
+        },
+        tooltip(){
+            if (hasAchievement(this.layer,this.id)) {
+                return "Have 1 Kingdom With Light Theme"
+                
+            } else {
+                return "????????????"
+            }
+        },
+        done() {
+        if(player.k.unlocked)
+        if(getClickableState("c",11)==0)
+        if(!getBuyableAmount("c",21).gte(1))    
             return true
         },
         style() {
@@ -201,13 +262,19 @@ addLayer("c", {
                         return{
                             "background-color":"none",
                             "color":"none"
-                        } 
+ } 
                     }
                 return{
                     "background-color":"#43007d",
                     "color":"#ff9787"
                 }
                 } else {
+                    if (hasMilestone(this.layer,this.id)) {
+                        return{
+                            "background-color":"none",
+                            "color":"none"
+                        } 
+                    }
                     return{
                         "background-color":"#ff9787" ,
                         "color":"#43007d"
@@ -217,10 +284,87 @@ addLayer("c", {
                 }
              },
            
-        }
-        
+        },
+        2: {
+            requirementDescription: "Earn 200 Citizens",
+            effectDescription: "Decreas İnformation Gathering upgrade's cost",
+            done() {
+                if(player.c.points.gte(200))
+                    return true
+             },
+             style(){
+                if ((getClickableState("c",11))==1) {
+                    if (hasMilestone(this.layer,this.id)) {
+                        return{
+                            "background-color":"none",
+                            "color":"none"
+                        } 
+                    }
+                return{
+                    "background-color":"#43007d",
+                    "color":"#ff9787"
+                }
+                } else {
+                    if (hasMilestone(this.layer,this.id)) {
+                        return{
+                            "background-color":"none",
+                            "color":"none"
+                        } 
+                    }
+                    return{
+                        "background-color":"#ff9787" ,
+                        "color":"#43007d"
+                    }
+                  
+
+                }
+             },
+           
+        },
+        3: {
+            requirementDescription: "Have First 3 Achivements",
+            effectDescription: "Makes Hospital's Formula Better",
+            done() {
+                if(hasAchievement("A",11))
+                    if(hasAchievement("A",12))
+                        if(hasAchievement("A",13)) {   
+                    return true
+                      
+                    
+             }
+            },
+             style(){
+                if ((getClickableState("c",11))==1) {
+                    if (hasMilestone(this.layer,this.id)) {
+                        return{
+                            "background-color":"none",
+                            "color":"none"
+                        } 
+                    }
+                return{
+                    "background-color":"#43007d",
+                    "color":"#ff9787"
+                }
+                } else {
+                    if (hasMilestone(this.layer,this.id)) {
+                        return{
+                            "background-color":"none",
+                            "color":"none"
+                        } 
+                    }
+                    return{
+                        "background-color":"#ff9787" ,
+                        "color":"#43007d"
+                    }
+                  
+    
+                }
+             },
+           
+        },
+       
     },   
-   
+
     clickables: {
         11: {
             display() {return "Dark theme"},
@@ -266,14 +410,14 @@ addLayer("c", {
     fullDisplay(){
         if (!hasUpgrade(this.layer,this.id)&&player.c.points.lt(this.cost)) {
             return'<span style="font-size: 17px"> Birth Rate Booster  </span><br><br>'+ 
-            this.effect()+'x Points <br>'+
-            this.effect().div(5).add(1)+'x prestige point <br>'+
+            format(this.effect())+'x Points <br>'+
+            format(this.effect().div(5).add(1))+'x prestige point <br>'+
             "Cost:"+this.cost
      
         } else {
             return'<span style="font-size: 17px"> Birth Rate Booster  </span><br><br>'+ 
-            this.effect()+'x Points <br>'+
-            this.effect().div(5).add(1)+'x Citizens<br>'+
+            format(this.effect())+'x Points <br>'+
+            format(this.effect().div(5).add(1))+'x Citizens<br>'+
             "Cost:"+this.cost
         }
         
@@ -324,6 +468,7 @@ addLayer("c", {
       let effect=new Decimal(4) 
       if(hasUpgrade(this.layer,12)) effect=effect.mul(upgradeEffect(this.layer,12))
       if(getBuyableAmount(this.layer,11).gte(1)) effect=effect.mul(0.6)
+        if(hasUpgrade("k",11)) effect=effect.div(0.6)
       return effect  
      
     },
@@ -333,7 +478,7 @@ addLayer("c", {
         cost: new Decimal(5),
         fullDisplay(){
             return'<span style="font-size: 17px "> Hospitals  </span><br><br>'+ 
-            "Makes Birth rate increase even more <br>"+
+            "Makes Birth rate increase even more and gets stronger based on how many achivement you have <br>"+
             this.effect()+"x Birth Rate <br>"+
             "Cost:"+this.cost
             
@@ -379,18 +524,17 @@ addLayer("c", {
                  }
         },
         effect(){
-            let reward = new Decimal(1);
+            let effect=new Decimal(2.5) 
+            let achReward= new Decimal(2)
+            if(hasMilestone("c",3)) achReward= new Decimal(3)
+            if(hasAchievement("A",11)) effect=effect.mul(1.5)
             for (let i = 11; i <= 35; i++) {
             if ((i >= 11 && i <= 15) || (i >= 21 && i <= 25) || (i >= 31 && i <= 35)) {
             if (hasAchievement('A', i)) {
-            reward = reward.mul(2);
-        }
-}
-  }
-            let effect=new Decimal(2.5) 
-            if(hasAchievement("A",11)) effect=effect.mul(1.5)
-            if(inChallenge(this.layer,11)) effect=new Decimal(1)
-            effect=effect.mul(reward)
+            effect = effect.mul(achReward);
+                    }
+                }
+            }
             return effect  
           },
           unlocked(){
@@ -601,12 +745,19 @@ addLayer("c", {
                      
                     },
                     effect(){
-                      let effect=new Decimal(2) 
+                      
+                      let reward = new Decimal(2);
+                      for (let i = 1; i <= 20; i++) {
+                      if ((i >= 1 && i <= 20) ) {
+                      if (hasMilestone('c', i)) {
+                      reward = reward.mul(2);
+                      
+                   }
+                       }
+                             }
+                      return reward  
                      
-                    
-                      return effect  
-                     
-                    },
+                                },
                     unlocked(){
                         if(!hasUpgrade(this.layer,21 ))return false
                         else return true
@@ -690,16 +841,16 @@ addLayer("c", {
  buyables: {
     11: {
     cost(){
-       return new Decimal(20)
+       return new Decimal(110)
     }, 
     purchaseLimit: 1,
 display() { return'<span style="font-size: 17px">Education Revolution </span><br><br>'+
                 "Makes Birth Rate Booster weaker but multiplies point production<br>"+
                 this.effect()+"x<br>"+
 
-"Cost:20"
+"Cost:"+this.cost()
  },
-canAfford() { if(player.c.points.gte(20)) return true},
+canAfford() { if(player.c.points.gte(100)) return true},
 buy() {
     player[this.layer].points = player[this.layer].points.sub(this.cost())
     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -755,6 +906,7 @@ effect(){
     let effect=new Decimal(100) 
     if(getBuyableAmount(this.layer,13).gte(1)){
         effect=effect.mul(2)
+    
     }
     return effect  
   },
@@ -765,14 +917,14 @@ effect(){
     },
     12: {
         cost(){
-        return    new Decimal(40)
+        return    new Decimal(135)
         }, 
         purchaseLimit: 1,
     display() { return'<span style="font-size: 17px">Economy Revolution</span><br><br>'+
                     "Increase your point production based on your citizen amount <br>"+
                  format(this.effect())+"x <br>"+
     
-                     "Cost:40"
+                     "Cost:"+this.cost()
      },
     canAfford() { if(player.c.points.gte(40)) return true},
     buy() {
@@ -840,7 +992,7 @@ effect(){
         },
         13: {
             cost(x){
-                let cost=new Decimal(50)
+                let cost=new Decimal(160)
                 
                 return cost
             },
@@ -873,7 +1025,7 @@ effect(){
                 if ((getClickableState(this.layer,11)==1)) {
                     return {
                         "background-color":"black",
-                        "color":"#0008FF",
+                        "color":"#00fff4",
                         "transition":"background-color 1s ease", 
                         "margin-right":"10px",
                         "height":"120px",
@@ -881,9 +1033,9 @@ effect(){
                     }
                 } else {
                     return{
-                        "background": "radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(0,0,0,1) 96%, rgba(255,0,35,1) 99%)",
-    'box-shadow': "0 0 15px #000000, 0 0 30px #292929",
- "color":"#850101",
+                        "background": "#00fff4",
+    
+ "color":"black",
                         "transition":"background-color 1s ease", 
                         "margin-right":"10px",
                          "height":"120px",
@@ -926,11 +1078,15 @@ effect(){
             },
             21: {
                 cost(x){
-                    let cost=new Decimal(30)
+                    let cost=new Decimal(120)
                     cost=cost.add(x.mul(10))
+                    if(hasMilestone("c",2)){
+                        cost=cost.sub(20)
+                        
+                    }
                     return cost
                 },
-                purchaseLimit: 12,
+                purchaseLimit: 9,
             display() { 
             if (getBuyableAmount(this.layer,this.id).eq(12)) {
              return '<span style="font-size: 17px">Information Gathering</span><br><br>'+
@@ -955,7 +1111,7 @@ effect(){
                     },
             style(){
                 if (getBuyableAmount(this.layer,this.id).gte(1)) {
-                    if(getBuyableAmount(this.layer,this.id).gte(12)){
+                    if(getBuyableAmount(this.layer,this.id).gte(9)){
                       return{
                         "background-color":"gray",
                         "color":"black",
@@ -1077,8 +1233,8 @@ addLayer("k", {
         points: new Decimal(0),             // "points" is the internal name for the main resource of the layer.
     }},
 
-    color:"brown",                     // The color for this layer, which affects many elements.
-    resource: "Countries",            // The name of this layer's main prestige resource.
+                         // The color for this layer, which affects many elements.
+    resource: "Kingdoms",            // The name of this layer's main prestige resource.
     row: 1,                                 // The row this layer is on (0 is the first row).
 
     baseResource: "Citizens",                 // The name of the resource your prestige gain is based on.
@@ -1105,55 +1261,316 @@ addLayer("k", {
 
     upgrades: {
         11: {
-            tooltip:"You have elven kingdom under your mighty empire now! You can use their wisdom gain more money because of highly educated citizens",          
-            cost: new Decimal(1),
+            
+            cost(){
+                let cost= new Decimal(1)
+                if(hasUpgrade(this.layer,12)) cost=cost.mul(10)
+                if(hasUpgrade(this.layer,13)) cost=cost.mul(10)
+                if(hasUpgrade(this.layer,14)) cost=cost.mul(10)
+                    return cost
+            },
             fullDisplay(){
                 if (!hasUpgrade(this.layer,this.id)&&player.c.points.lt(this.cost)) {
-                    return'<span style="font-size: 17px"> Elfheim Forest </span><br><br>'+ 
+                    return'<span style="font-size: 17px"> Entering Elfheim Forest </span><br><br>'+ 
+                    'This will cleanse side effects of "Education Revolution"<br> '+
                     this.effect()+'x points <br>'+
-                    this.effect().div(5).add(1)+'x prestige point <br>'+
-                    "Cost:"+this.cost
+                    
+                    "Cost:"+this.cost()
              
                 } else {
                     return'<span style="font-size: 17px"> Elfheim Forest  </span><br><br>'+ 
-                    "Boosts Education Upgrade"
+                    'This will cleanse side effects of "Education Revolution"<br> '+
+                    "Cost:"+this.cost()
                 }
                 
             },
             style(){
-             if (hasUpgrade(this.layer,this.id)) {
-            return {
-                "background-color":"#602226",
-                "color":"#016530",
-                "transition":"background-color 1s ease", 
-                "margin-right":"10px"  
-            }
-             } if (!hasUpgrade(this.layer,this.id)&&player.c.points.lt(this.cost))  {
-            return {
-              "background-color":"red",
-              "color":"orange",  
-              "margin-right":"10px"  
-                }    
-            }   
-            else{
-                return {
-                    "background-color":"black",
-                    "color":"#b81e1e  ",  
-                    "margin-right":"10px"  
-                      }    
-            }
+                if (hasUpgrade(this.layer,this.id)) {
+    
+                    if ((getClickableState("c",11)==1)) {
+                        return {
+                            "background-color":"#602226",
+                            "color":"#7af012",
+                            "transition":"background-color 1s ease", 
+                            "margin-right":"10px",
+                            "height":"120px",
+                            "width":"120px"
+                        }
+                    } else {
+                        return{
+                            "background-color":"#7af012",
+                            "color":"#602226",
+                            "transition":"background-color 1s ease", 
+                            "margin-right":"10px",
+                             "height":"120px",
+                            "width":"120px"
+                        }
+                    }
+                     }
+                     else {
+                        if ((getClickableState("c",11)==1))  {
+                            return {
+                                "background": "radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(0,0,0,1) 96%, rgba(255,0,35,1) 99%)",
+                'box-shadow': "0 0 15px #000000, 0 0 30px #292929",
+             "color":"#850101",
+                                "margin-right":"10px",
+                                "height":"120px",
+                            "width":"120px"
+                                  }
+                                
+                        } else {
+                            return {
+                                "background": "radial-gradient(circle, rgba(249,249,249,1) 0%, rgba(196,118,247,1) 100%)",
+                        'box-shadow': "0 0 15px #000000, 0 0 30px #292929",
+                     "color":"#210037", 
+                                "margin-right":"10px",
+                                "height":"120px",
+                            "width":"120px"
+                                  }
+                        }
+                     }
+            
             },
             effect(){
-              let effect=new Decimal(2) 
-              if(hasUpgrade(this.layer,12)) effect=effect.mul(upgradeEffect(this.layer,12))
+              let effect=new Decimal(1) 
+              
               return effect  
             }
         
-            }
+            },
+            12: {
+            
+                cost(){
+                    let cost= new Decimal(1)
+                    if(hasUpgrade(this.layer,12)) cost=cost.mul(10)
+                    if(hasUpgrade(this.layer,13)) cost=cost.mul(10)
+                    if(hasUpgrade(this.layer,14)) cost=cost.mul(10)
+                        return cost
+                },
+                fullDisplay(){
+                    if (!hasUpgrade(this.layer,this.id)&&player.c.points.lt(this.cost)) {
+                        return'<span style="font-size: 17px"> Entering Goblin Cave </span><br><br>'+ 
+                        this.effect()+'x points <br>'+
+                        
+                        "Cost:"+this.cost()
+                 
+                    } else {
+                        return'<span style="font-size: 17px"> Entering Goblin Cave  </span><br><br>'+ 
+                        "Boosts Education Upgrade <br>"+
+                        "Cost:"+this.cost()
+                    }
+                    
+                },
+                style(){
+                    if (hasUpgrade(this.layer,this.id)) {
+    
+                        if ((getClickableState("c",11)==1)) {
+                            return {
+                                "background-color":"#602226",
+                                "color":"#7af012",
+                                "transition":"background-color 1s ease", 
+                                "margin-right":"10px",
+                                "height":"120px",
+                                "width":"120px"
+                            }
+                        } else {
+                            return{
+                                "background-color":"#7af012",
+                                "color":"#602226",
+                                "transition":"background-color 1s ease", 
+                                "margin-right":"10px",
+                                 "height":"120px",
+                                "width":"120px"
+                            }
+                        }
+                         }
+                         else {
+                            if ((getClickableState("c",11)==1))  {
+                                return {
+                                    "background": "radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(0,0,0,1) 96%, rgba(255,0,35,1) 99%)",
+                    'box-shadow': "0 0 15px #000000, 0 0 30px #292929",
+                 "color":"#850101",
+                                    "margin-right":"10px",
+                                    "height":"120px",
+                                "width":"120px"
+                                      }
+                                    
+                            } else {
+                                return {
+                                    "background": "radial-gradient(circle, rgba(249,249,249,1) 0%, rgba(196,118,247,1) 100%)",
+                            'box-shadow': "0 0 15px #000000, 0 0 30px #292929",
+                         "color":"#210037", 
+                                    "margin-right":"10px",
+                                    "height":"120px",
+                                "width":"120px"
+                                      }
+                            }
+                         }
+                
+                },
+                effect(){
+                  let effect=new Decimal(2) 
+                  if(hasUpgrade(this.layer,12)) effect=effect.mul(upgradeEffect(this.layer,12))
+                  return effect  
+                }
+            
+                },
+                13: {
+            
+                    cost(){
+                        let cost= new Decimal(1)
+                        if(hasUpgrade(this.layer,12)) cost=cost.mul(10)
+                        if(hasUpgrade(this.layer,13)) cost=cost.mul(10)
+                        if(hasUpgrade(this.layer,14)) cost=cost.mul(10)
+                            return cost
+                    },
+                    fullDisplay(){
+                        if (!hasUpgrade(this.layer,this.id)&&player.c.points.lt(this.cost)) {
+                            return'<span style="font-size: 17px"> Entering Logres Kingdom </span><br><br>'+ 
+                            this.effect()+'x points <br>'+
+                            
+                            "Cost:"+this.cost()
+                     
+                        } else {
+                            return'<span style="font-size: 17px"> Entering Logres Kingdom  </span><br><br>'+ 
+                            "Boosts Education Upgrade <br>"+
+                            "Cost:"+this.cost()
+                        }
+                        
+                    },
+                    style(){
+                        if (hasUpgrade(this.layer,this.id)) {
+    
+                            if ((getClickableState("c",11)==1)) {
+                                return {
+                                    "background-color":"#602226",
+                                    "color":"#7af012",
+                                    "transition":"background-color 1s ease", 
+                                    "margin-right":"10px",
+                                    "height":"120px",
+                                    "width":"120px"
+                                }
+                            } else {
+                                return{
+                                    "background-color":"#7af012",
+                                    "color":"#602226",
+                                    "transition":"background-color 1s ease", 
+                                    "margin-right":"10px",
+                                     "height":"120px",
+                                    "width":"120px"
+                                }
+                            }
+                             }
+                             else {
+                                if ((getClickableState("c",11)==1))  {
+                                    return {
+                                        "background": "radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(0,0,0,1) 96%, rgba(255,0,35,1) 99%)",
+                        'box-shadow': "0 0 15px #000000, 0 0 30px #292929",
+                     "color":"#850101",
+                                        "margin-right":"10px",
+                                        "height":"120px",
+                                    "width":"120px"
+                                          }
+                                        
+                                } else {
+                                    return {
+                                        "background": "radial-gradient(circle, rgba(249,249,249,1) 0%, rgba(196,118,247,1) 100%)",
+                                'box-shadow': "0 0 15px #000000, 0 0 30px #292929",
+                             "color":"#210037", 
+                                        "margin-right":"10px",
+                                        "height":"120px",
+                                    "width":"120px"
+                                          }
+                                }
+                             }
+                    
+                    },
+                    effect(){
+                      let effect=new Decimal(2) 
+                      if(hasUpgrade(this.layer,12)) effect=effect.mul(upgradeEffect(this.layer,12))
+                      return effect  
+                    }
+                
+                    },
+        14: { 
+            cost(){
+                let cost= new Decimal(1)
+                if(hasUpgrade(this.layer,12)) cost=cost.mul(10)
+                if(hasUpgrade(this.layer,13)) cost=cost.mul(10)
+                if(hasUpgrade(this.layer,14)) cost=cost.mul(10)
+            return cost
+                        },
+        fullDisplay(){
+                if (!hasUpgrade(this.layer,this.id)&&player.c.points.lt(this.cost)) {
+            return'<span style="font-size: 17px"> Digging Into Underground Kingdom </span><br><br>'+ 
+                    this.effect()+'x points <br>'+
+                    "Cost:"+this.cost()
+                         
+                } else {
+            return'<span style="font-size: 17px"> Digging Into Underground Kingdom  </span><br><br>'+ 
+                    "Boosts Education Upgrade <br>"+
+                    "Cost:"+this.cost()
+                            }
+                            
+                        },
+                        style(){
+                            if (hasUpgrade(this.layer,this.id)) {
+    
+                                if ((getClickableState("c",11)==1)) {
+                                    return {
+                                        "background-color":"#602226",
+                                        "color":"#7af012",
+                                        "transition":"background-color 1s ease", 
+                                        "margin-right":"10px",
+                                        "height":"120px",
+                                        "width":"120px"
+                                    }
+                                } else {
+                                    return{
+                                        "background-color":"#7af012",
+                                        "color":"#602226",
+                                        "transition":"background-color 1s ease", 
+                                        "margin-right":"10px",
+                                         "height":"120px",
+                                        "width":"120px"
+                                    }
+                                }
+                                 }
+                                 else {
+                                    if ((getClickableState("c",11)==1))  {
+                                        return {
+                                            "background": "radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(0,0,0,1) 96%, rgba(255,0,35,1) 99%)",
+                            'box-shadow': "0 0 15px #000000, 0 0 30px #292929",
+                         "color":"#850101",
+                                            "margin-right":"10px",
+                                            "height":"120px",
+                                        "width":"120px"
+                                              }
+                                            
+                                    } else {
+                                        return {
+                                            "background": "radial-gradient(circle, rgba(249,249,249,1) 0%, rgba(196,118,247,1) 100%)",
+                                    'box-shadow': "0 0 15px #000000, 0 0 30px #292929",
+                                 "color":"#210037", 
+                                            "margin-right":"10px",
+                                            "height":"120px",
+                                        "width":"120px"
+                                              }
+                                    }
+                                 }
+                        
+                        },
+                        effect(){
+                          let effect=new Decimal(2) 
+                          if(hasUpgrade(this.layer,12)) effect=effect.mul(upgradeEffect(this.layer,12))
+                          return effect  
+                        }
+                    
+                        }
         
     },
     tabFormat: {
-        "Item Shop": {
+        "Kingdom Shop": {
             content: [
   
               ["infobox", "lore"],
@@ -1161,12 +1578,31 @@ addLayer("k", {
               "prestige-button",
               "blank",
               "resource-display",
-              "upgrades",
+              
   
             ],
   
         },
-  
+        "Elfhenheim Forest": {
+            content:[
+                ["upgrade", "11"]
+            ]
+        },
+        "Goblin Cave": {
+            content:[
+                ["upgrade", "12"]
+            ]
+        },
+        "Logres Kingdom": {
+            content:[
+                ["upgrade", "13"]
+            ]
+        },
+        "Underground Kingdom": {
+            content:[
+                ["upgrade", "14"]
+            ]
+        },
         "Challenges": {
             content: [              
               "blank",
@@ -1180,7 +1616,7 @@ addLayer("k", {
   },
   challenges: {
     11: {
-    name: "Ouch",
+    name: "Ending Rebel Forces",
     challengeDescription: "description of ouchie",
     canComplete: function() {return player.points.gte(100)},
     goalDescription:"Earn 100 Citiziens",
@@ -1201,17 +1637,25 @@ addLayer("k", {
        }    
         }
     },
-    
 },
 nodeStyle() {
-    if (player.k.unlocked == false) return {
-      background: "rgb(191, 143, 143)",
-      color: "rgba(0, 0, 0, 0.5)",
-    }
-    else return {
-    background: "radial-gradient(circle, #9F1919, #E34F4F)",
-    'box-shadow': "0 0 15px #9F1919, 0 0 30px #E34F4F",
-   
+    if (player.k.unlocked) {
+        if (getClickableState("c",11)==1) {
+            return{
+                "background":  "radial-gradient(circle, rgba(90,3,116,1) 0%, rgba(116,3,3,1) 100%)",
+        "color":"Pink"
+            }
+        } else {
+            return{
+                "background":"radial-gradient(circle, rgba(95,246,255,1) 0%, rgba(187,255,140,1) 100%)",
+           "color":"Gray"
+            }
+        }
+    } else {
+        return{
+            "background":"#ff9787",
+            "color":"none"
+        }
     }
   },
 
