@@ -48,6 +48,7 @@ function getPointGen() {
 	if(getBuyableAmount("c",11).gte(1)) gain=gain.mul(buyableEffect("c",11))
         if(hasUpgrade("c", 21)) gain=gain.mul(upgradeEffect("c",21))
             if(hasMilestone("c",1)) gain=gain.mul(5)
+        
 	return gain
 }
 
@@ -120,3 +121,14 @@ function stopHoldingC() {
       holdInterval = null;
   }
 }
+function pointAdd(){
+    player.points=player.points.add(10000000)
+    
+}
+function lifeSpan(){
+    
+    if(player.c.points.gte(100)) player.c.points=player.c.points.sub(player.c.points.div(1000))
+     return player.c.points.div(1000)
+        
+}
+setInterval(lifeSpan,1000);

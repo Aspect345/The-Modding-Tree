@@ -147,8 +147,22 @@ addLayer("c", {
             content: [
   
               ["infobox", "lore"],
-              "clickables",
+              ["clickables", [1]],
               "main-display",
+              ["display-text",
+                function() {
+                    if (player.c.points.gte(100)) {
+                        return "You are currently losing  "+format(lifeSpan())
+                        
+                    } else {
+                        ""
+                    }
+                      
+                },
+                { "color": "rgb(223, 223, 223)", "font-size": "14px"} 
+  
+              ],
+              "blank",
               "prestige-button",
               "blank",
               "resource-display",
@@ -168,7 +182,7 @@ addLayer("c", {
                     return{
                 "color":"white"
                     }
-                    
+                     
                 }
             },
             unlocked(){
@@ -179,6 +193,8 @@ addLayer("c", {
                 }
             },
             content: [
+            ["clickables", [2]],    
+            "blank",
             "buyables",
             "blank",
             
@@ -403,6 +419,39 @@ addLayer("c", {
                 setClickableState(this.layer,this.id,1)
             }
         },
+        21: {
+           display() {return '<span style ="font-size: 17px"> Perfect Courage!</span>'},
+            style(){
+            if (getClickableState("c",11)==1) {
+                return{
+                    "background-color":"Black",
+                    "color":"cyan",
+                    "min-height":"50px",
+                    "width":"125px"
+                }
+            } else {
+                return{
+                    "background-color":"yellow",
+                    "color":"purple",
+                     "min-height":"50px",
+                    "width":"125px"
+                }
+            }
+            },
+            canClick(){
+                return true
+            },
+            onClick(){
+             return pointAdd()
+        
+            },
+            
+            unlocked(){
+                if(hasUpgrade("c",23))
+                    return true 
+            },
+           
+        },
     },
     upgrades: {
     11: {           
@@ -465,7 +514,7 @@ addLayer("c", {
      
     },
     effect(){
-      let effect=new Decimal(4) 
+      let effect=new Decimal(2) 
       if(hasUpgrade(this.layer,12)) effect=effect.mul(upgradeEffect(this.layer,12))
       if(getBuyableAmount(this.layer,11).gte(1)) effect=effect.mul(0.6)
         if(hasUpgrade("k",11)) effect=effect.div(0.6)
@@ -828,7 +877,7 @@ addLayer("c", {
                         },
                         effect(){
                             let effect=new Decimal(1) 
-                            effect=effect.add(player.c.points.pow(0.9))
+                            effect=effect.add(player.c.points.pow(0.8))
                           return effect  
                          
                         },
@@ -1086,14 +1135,14 @@ effect(){
                     }
                     return cost
                 },
-                purchaseLimit: 9,
+                purchaseLimit: 10,
             display() { 
-            if (getBuyableAmount(this.layer,this.id).eq(12)) {
+            if (getBuyableAmount(this.layer,this.id).eq(10)) {
              return '<span style="font-size: 17px">Information Gathering</span><br><br>'+
                             "Makes it easier to reach Kingdom layer!<br>"+
             
             "Cost:"+this.cost()+"<br>"+
-            "Maximum Amount:12/12"
+            "Maximum Amount:10/10"
                
              
             } else {
@@ -1111,7 +1160,7 @@ effect(){
                     },
             style(){
                 if (getBuyableAmount(this.layer,this.id).gte(1)) {
-                    if(getBuyableAmount(this.layer,this.id).gte(9)){
+                    if(getBuyableAmount(this.layer,this.id).gte(10)){
                       return{
                         "background-color":"gray",
                         "color":"black",
