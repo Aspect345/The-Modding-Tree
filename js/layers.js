@@ -97,7 +97,7 @@ addLayer("A", {
     },
     14: {
         name: "Spending time to increase life quality",
-        tooltip: "Play for 30 mins <br> <h5><h5>",
+        tooltip: "Play for 1 hour <br> <h5><h5>",
         done() {
         if(player.timePlayed >3600)
             return true
