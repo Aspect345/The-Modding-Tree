@@ -79,10 +79,27 @@ addLayer("A", {
         },
     },
     13: {
+        name: "Controlling all information brokers",
+        tooltip: "Buy Information Gathering upgrade 10 times! <br> <h5><h5>",
+        done() {
+        if(getBuyableAmount("c",21).gte(10))
+            return true
+        },
+        style() {
+          return {
+            "width": "110px",
+            "height": " 110px",
+            "border-radius": "20px",
+            "border": "100px",
+            "margin": "0.5px"
+          }
+        },
+    },
+    14: {
         name: "Spending time to increase life quality",
         tooltip: "Play for 30 mins <br> <h5><h5>",
         done() {
-        if(player.timePlayed >1800)
+        if(player.timePlayed >3600)
             return true
         },
         style() {
