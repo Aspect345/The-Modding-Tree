@@ -127,8 +127,8 @@ function pointAdd(){
 }
 function lifeSpan(){
     
-    if(player.c.points.gte(100)) player.c.points=player.c.points.sub(player.c.points.div(1000))
-     return player.c.points.div(1000)
+    if(player.c.points.gte(100)) player.c.points=player.c.points.sub(player.c.points.div(10000))
+     return player.c.points.div(10000)
         
 }
 setInterval(lifeSpan,1000);

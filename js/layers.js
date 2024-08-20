@@ -899,7 +899,7 @@ display() { return'<span style="font-size: 17px">Education Revolution </span><br
 
 "Cost:"+this.cost()
  },
-canAfford() { if(player.c.points.gte(100)) return true},
+canAfford() { if(player.c.points.gte(this.cost())) return true},
 buy() {
     player[this.layer].points = player[this.layer].points.sub(this.cost())
     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
@@ -975,7 +975,7 @@ effect(){
     
                      "Cost:"+this.cost()
      },
-    canAfford() { if(player.c.points.gte(40)) return true},
+    canAfford() { if(player.c.points.gte(this.cost())) return true},
     buy() {
         player[this.layer].points = player[this.layer].points.sub(this.cost())
         setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
